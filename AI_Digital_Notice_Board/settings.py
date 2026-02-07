@@ -7,7 +7,11 @@ load_dotenv()  # loads .env from project root
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-local-dev-key-change-in-production"
+)
+
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 

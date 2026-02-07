@@ -13,7 +13,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('about/', about, name='about'),
     
-    path('notices/', include('apps.notice.urls')),
+    path('notice/', include('apps.notice.urls')),
     
     path('', home, name='home'),
     

@@ -66,17 +66,33 @@ WSGI_APPLICATION = 'AI_Digital_Notice_Board.wsgi.application'
 ASGI_APPLICATION = 'AI_Digital_Notice_Board.asgi.application'
 
 # Database (MySQL)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DB', 'digital_notice_board'),
-        'USER': os.getenv('MYSQL_USER', 'system'),
-        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'system'),
-        'HOST': os.getenv('MYSQL_HOST', '127.0.0.1'),
-        'PORT': os.getenv('MYSQL_PORT', '3306'),
-        'OPTIONS': {'charset': 'utf8mb4'},
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+if os.getenv("RENDER") == "true":
+    # ✅ Render / Production
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    # ✅ Local development (MySQL)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("MYSQL_DB", "digital_notice_board"),
+            "USER": os.getenv("MYSQL_USER", "system"),
+            "PASSWORD": os.getenv("MYSQL_PASSWORD", "system"),
+            "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
+            "PORT": os.getenv("MYSQL_PORT", "3306"),
+            "OPTIONS": {"charset": "utf8mb4"},
+        }
+    }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

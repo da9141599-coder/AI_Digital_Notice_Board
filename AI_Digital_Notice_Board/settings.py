@@ -11,8 +11,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 
-
-
 # Apps
 INSTALLED_APPS = [
     # Django
@@ -65,11 +63,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AI_Digital_Notice_Board.wsgi.application'
 ASGI_APPLICATION = 'AI_Digital_Notice_Board.asgi.application'
 
-# Database (MySQL)
-import os
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+RENDER = os.environ.get("RENDER", "").lower() == "true"
 
 if os.getenv("RENDER") == "true":
     # ✅ Render / Production

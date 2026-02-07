@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Update Notice{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card border-0 shadow-lg rounded-4 w-100" style="max-width:760px;">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white rounded-top-4 py-3">
+            <h4 class="mb-0 fw-semibold">
+                ✏️ Update Notice
+            </h4>
+            <small class="opacity-75">
+                Modify the notice details and save changes
+            </small>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
+
+            <!-- Info Alert -->
+            <div class="alert alert-info d-flex align-items-center shadow-sm rounded-3 mb-4">
+                <span class="me-2 fs-5">ℹ️</span>
+                <div>
+                    Ensure the information is accurate before saving.
+                    Changes will reflect immediately for viewers.
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                <!-- Django Form -->
+                <div class="mb-4">
+                    {{ form.as_p }}
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{% url 'notice:notice_detail' object.pk %}"
+                       class="btn btn-outline-secondary px-4">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary px-5 fw-semibold shadow-sm">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

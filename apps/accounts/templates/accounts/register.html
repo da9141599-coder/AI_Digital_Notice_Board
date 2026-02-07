@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card border-0 shadow-lg rounded-4 p-4"
+         style="max-width:700px; width:100%;">
+
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="fs-1 mb-2">📝</div>
+            <h3 class="fw-bold">Create Your Account</h3>
+            <p class="text-muted mb-0">
+                Join the AI Digital Notice Board platform
+            </p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+            {{ profile_form.non_field_errors }}
+
+            <!-- ACCOUNT DETAILS -->
+            <h5 class="fw-semibold mb-3">Account Details</h5>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    <div class="text-danger small">{{ form.username.errors }}</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    <div class="text-danger small">{{ form.email.errors }}</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    <div class="text-danger small">{{ form.password1.errors }}</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    <div class="text-danger small">{{ form.password2.errors }}</div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- PROFILE DETAILS -->
+            <h5 class="fw-semibold mb-3">Profile Information</h5>
+
+            <div class="row">
+                <div class="col-12">
+                    {{ profile_form.as_p }}
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <small class="text-muted">
+                    Already registered?
+                    <a href="{% url 'accounts:login' %}"
+                       class="fw-semibold text-decoration-none">
+                        Login here
+                    </a>
+                </small>
+
+                <button type="submit"
+                        class="btn btn-primary btn-lg px-4 shadow-sm fw-semibold">
+                    Register
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

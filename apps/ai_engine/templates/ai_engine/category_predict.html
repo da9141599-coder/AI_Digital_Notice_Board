@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>AI Category Predictor</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Predict</button>
+  </form>
+
+  {% if category %}
+  <div class="mt-4">
+    <h4>Predicted Category: <span class="text-success">{{ category }}</span></h4>
+    <p><strong>Summary:</strong> {{ summary }}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Digital Notice Board{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="fw-bold mb-3">AI Enabled Digital Notice Board</h1>
+    <p class="lead text-muted mb-4">
+        Smart, paperless notice management system for institutions
+    </p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'notice:notice_list' %}" class="btn btn-primary btn-lg">
+            View Notices
+        </a>
+    {% else %}
+        <a href="/accounts/login/" class="btn btn-primary btn-lg me-2">Login</a>
+        <a href="/accounts/register/" class="btn btn-outline-primary btn-lg">Register</a>
+    {% endif %}
+</div>
+{% endblock %}
+<h2>Global Notices</h2>
+
+{% for notice in notices %}
+  <h4>{{ notice.title }}</h4>
+  <p>{{ notice.description }}</p>
+{% empty %}
+  <p>No global notices</p>
+{% endfor %}
+
+<h1>TEST NOTICE PAGE</h1>
+
+<p>Total notices: {{ notices|length }}</p>
+
+{% for notice in notices %}
+  <div style="border:2px solid red; margin:10px; padding:10px;">
+    <h3>{{ notice.title }}</h3>
+    <p>{{ notice.description }}</p>
+    <p>Global: {{ notice.is_global }}</p>
+    <p>Active: {{ notice.is_active }}</p>
+  </div>
+{% empty %}
+  <p style="color:red;">NO NOTICES FOUND</p>
+{% endfor %}

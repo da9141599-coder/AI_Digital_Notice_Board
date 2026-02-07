@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+
+    <!-- ================= PROFILE CARD ================= -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm border-0 text-center">
+
+            <!-- Profile Header -->
+<div class="card-body bg-primary text-white rounded-top text-center">
+
+    <div class="mb-3">
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}"
+                 class="rounded-circle shadow"
+                 width="110"
+                 height="110"
+                 style="object-fit: cover;"
+                 alt="Profile Image">
+        {% else %}
+            <img src="{% static 'images/user-avatar.png' %}"
+                 class="rounded-circle shadow"
+                 width="110"
+                 height="110"
+                 alt="Default Avatar">
+        {% endif %}
+    </div>
+
+    <h4 class="fw-bold mb-0">{{ request.user.username }}</h4>
+    <small class="opacity-75">{{ request.user.email }}</small>
+
+</div>
+
+
+            <!-- Profile Info -->
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Role</span>
+                    <span class="badge 
+                        {% if profile.role == 'staff' %}
+                            bg-info
+                        {% elif profile.role == 'student' %}
+                            bg-success
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                    ">
+                        {{ profile.role|capfirst }}
+                    </span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Account Status</span>
+                    <span class="badge bg-success">Active</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= EDIT PROFILE FORM ================= -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-light fw-bold">
+                ✏️ Edit Profile
+            </div>
+
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="needs-validation">
+                    {% csrf_token %}
+
+                    <!-- Render Form Fields -->
+                    {% for field in profile_form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="reset" class="btn btn-outline-secondary">
+                            Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary px-4">
+                            Save Changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

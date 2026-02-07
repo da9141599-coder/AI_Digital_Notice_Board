@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Archive Notice{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card border-0 shadow-lg rounded-4 p-4"
+         style="max-width:520px; width:100%;">
+
+        <!-- Icon -->
+        <div class="text-center mb-3">
+            <div class="fs-1 text-danger">⚠️</div>
+        </div>
+
+        <!-- Heading -->
+        <h4 class="text-center fw-bold mb-2 text-danger">
+            Archive Notice
+        </h4>
+
+        <p class="text-center text-muted mb-4">
+            This action will remove the notice from active display.
+            <br>
+            <strong>This cannot be undone.</strong>
+        </p>
+
+        <!-- Notice Preview -->
+        <div class="alert alert-light border shadow-sm rounded-3 mb-4">
+            <h6 class="fw-semibold mb-1">Notice Title</h6>
+            <p class="mb-0 text-dark">
+                "{{ object.title }}"
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <form method="post" class="d-flex justify-content-between">
+            {% csrf_token %}
+            <a href="{% url 'notice:notice_detail' object.pk %}"
+               class="btn btn-outline-secondary px-4">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn btn-danger px-4 fw-semibold shadow-sm">
+                Yes, Archive
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

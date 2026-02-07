@@ -1,23 +1,28 @@
 # AI Digital Notice Board
 
-An AI-enabled web-based Digital Notice Board developed using Django.
+An AI-enabled Digital Notice Board system built using Django.
 
 ## Features
 - Role-based access (Admin, Teacher, Student)
-- Notice creation and viewing
-- AI-based priority classification
-- Voice-assisted notice description
-- Responsive UI (Mobile + Desktop)
-- Secure authentication
+- Create, update, and view notices
+- AI-based notice priority classification
+- OCR and text summarization
+- REST API support
+- Mobile-friendly UI
 
 ## Tech Stack
-- Backend: Django 4.2
-- Frontend: HTML, Bootstrap 5
-- Database: SQLite (can be upgraded to MySQL/PostgreSQL)
-- AI/NLP: NLTK, Scikit-learn
+- Django 4.2
+- MySQL
+- Bootstrap 5
+- Scikit-learn
+- NLTK
+- Django REST Framework
 
-## How to Run Locally
-```bash
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+## Deployment
+This project is configured for cloud deployment using:
+- Gunicorn
+- Procfile
+- Static file collection
+
+## Author
+Darshan Gowda

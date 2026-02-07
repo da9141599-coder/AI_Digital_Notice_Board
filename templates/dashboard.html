@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Welcome Card -->
+    <div class="card border-0 shadow-lg mb-4 bg-gradient"
+         style="background: linear-gradient(135deg, #0d6efd, #6610f2); color: white;">
+        <div class="card-body p-4">
+            <h2 class="fw-bold mb-1">
+                👋 Welcome, {{ user.username }}
+            </h2>
+            <p class="opacity-75 mb-0">
+                Manage notices and AI-powered predictions from one place.
+            </p>
+        </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="row g-4">
+
+        <!-- Create Notice -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 dashboard-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box bg-primary text-white mb-3">
+                        📝
+                    </div>
+                    <h5 class="fw-semibold">Create Notice</h5>
+                    <p class="text-muted small">
+                        Publish new announcements instantly.
+                    </p>
+                    <a href="/notice/create/" class="btn btn-primary w-100">
+                        Create New Notice
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Notices -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 dashboard-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box bg-outline-primary text-primary mb-3">
+                        📋
+                    </div>
+                    <h5 class="fw-semibold">All Notices</h5>
+                    <p class="text-muted small">
+                        View, filter, and manage notices.
+                    </p>
+                    <a href="/notice/notice_list/" class="btn btn-outline-primary w-100">
+                        View All Notices
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Board -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 dashboard-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box bg-dark text-white mb-3">
+                        📺
+                    </div>
+                    <h5 class="fw-semibold">Display Board</h5>
+                    <p class="text-muted small">
+                        Open the live digital notice board.
+                    </p>
+                    <a href="/notice/display/" class="btn btn-dark w-100">
+                        Open Display Board
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+.dashboard-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.bg-outline-primary {
+    border: 2px solid #0d6efd;
+}
+</style>
+{% endblock %}
+

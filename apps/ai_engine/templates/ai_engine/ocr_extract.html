@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>OCR Text Extractor</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Extract</button>
+  </form>
+
+  {% if text %}
+  <div class="mt-4">
+    <h4>Extracted Text</h4>
+    <pre>{{ text }}</pre>
+
+    <h5 class="mt-3">AI Summary</h5>
+    <p>{{ summary }}</p>
+
+    <h5 class="mt-3">Predicted Category</h5>
+    <p class="text-success">{{ category }}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

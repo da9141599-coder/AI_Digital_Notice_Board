@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- ================= HEADER ================= -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">📌 Notices</h2>
+      <p class="text-muted mb-0">Latest announcements and updates</p>
+    </div>
+
+    <!-- Create Notice (ONLY Admin & Teacher) -->
+    {% if user.is_superuser or user.profile.role == 'teacher' %}
+      <a class="btn btn-primary btn-sm px-4 shadow-sm"
+         href="{% url 'notice:create_notice' %}">
+        ➕ Create Notice
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- ================= NOTICE GRID ================= -->
+  <div class="row g-4">
+
+    {% for notice in notices %}
+      <div class="col-lg-4 col-md-6">
+
+        <div class="notice-card h-100">
+
+          <!-- TOP COLOR STRIP -->
+          <div class="notice-strip
+            {% if notice.priority == 'high' %}strip-danger
+            {% elif notice.priority == 'medium' %}strip-warning
+            {% else %}strip-success{% endif %}">
+          </div>
+
+          <div class="notice-body">
+
+            <!-- Category & Priority -->
+            <div class="d-flex justify-content-between mb-2">
+              <span class="badge bg-light text-dark border">
+                {{ notice.category|default:"General" }}
+              </span>
+
+              <span class="badge 
+                {% if notice.priority == 'high' %}bg-danger
+                {% elif notice.priority == 'medium' %}bg-warning text-dark
+                {% else %}bg-success{% endif %}">
+                {{ notice.priority|capfirst }}
+              </span>
+            </div>
+
+            <!-- Title -->
+            <h5 class="fw-semibold mb-2">
+              {{ notice.title }}
+            </h5>
+
+            <!-- Description -->
+            <p class="text-muted small mb-3">
+              {{ notice.description|truncatechars:130 }}
+            </p>
+
+            <a class="stretched-link"
+               href="{% url 'notice:notice_detail' notice.pk %}"></a>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="notice-footer">
+            <span>🕒 {{ notice.publish_date|date:"d M Y" }}</span>
+            <span>👤 {{ notice.posted_by.username }}</span>
+          </div>
+
+        </div>
+      </div>
+
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-info shadow-sm">
+          No notices available at the moment.
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- ================= PAGINATION ================= -->
+  {% if is_paginated %}
+  <nav class="mt-5">
+    <ul class="pagination justify-content-center">
+
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">← Previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">← Previous</span>
+        </li>
+      {% endif %}
+
+      <li class="page-item active">
+        <span class="page-link">{{ page_obj.number }}</span>
+      </li>
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next →</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next →</span>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+  {% endif %}
+
+</div>
+
+<!-- ================= CUSTOM STYLES ================= -->
+<style>
+.notice-card {
+  background: linear-gradient(135deg, #f8fbff, #eef5ff);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.notice-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+.notice-strip {
+  height: 6px;
+}
+
+.strip-danger { background: linear-gradient(90deg, #ff4b2b, #ff416c); }
+.strip-warning { background: linear-gradient(90deg, #f7971e, #ffd200); }
+.strip-success { background: linear-gradient(90deg, #11998e, #38ef7d); }
+
+.notice-body {
+  padding: 1.2rem 1.2rem 0.8rem;
+}
+
+.notice-footer {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(0,0,0,0.05);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  color: #555;
+}
+</style>
+
+{% endblock %}
+<h2>{{ notice.title }}</h2>
+<p>{{ notice.description }}</p>
+<p>Published: {{ notice.publish_date }}</p>
+
+<a href="{% url 'notice:notice_list' %}">Back to Notices</a>

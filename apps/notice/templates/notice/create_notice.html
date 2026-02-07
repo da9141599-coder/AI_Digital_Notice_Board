@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create Notice{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 900px;">
+
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">📝 Create New Notice</h2>
+        <p class="text-muted">Professional voice-assisted notice creation</p>
+        <hr class="w-25 mx-auto">
+    </div>
+
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                <!-- TITLE -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">{{ form.title.label }}</label>
+                    {{ form.title }}
+                </div>
+
+                <!-- DESCRIPTION + VOICE -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold d-flex justify-content-between align-items-center">
+                        {{ form.description.label }}
+
+                        <div class="d-flex gap-2">
+                            <button type="button" id="startBtn"
+                                    class="btn btn-sm btn-outline-primary rounded-circle"
+                                    title="Start voice typing">🎤</button>
+
+                            <button type="button" id="stopBtn"
+                                    class="btn btn-sm btn-outline-danger rounded-circle d-none"
+                                    title="Stop voice typing">⏹</button>
+                        </div>
+                    </label>
+
+                    {{ form.description }}
+
+                    <!-- LISTENING UI -->
+                    <div id="listeningBox" class="listening-ui d-none mt-2">
+                        <span class="pulse-dot"></span>
+                        <span class="fw-semibold">Listening… Speak clearly</span>
+                    </div>
+
+                    <small class="text-muted">
+                        🎤 Speak • ⏹ Stop • Clearing text resets voice buffer automatically
+                    </small>
+                </div>
+
+                <!-- DATE -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">{{ form.publish_date.label }}</label>
+                    {{ form.publish_date }}
+                </div>
+
+                <!-- ATTACHMENT -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">{{ form.attachment.label }}</label>
+                    {{ form.attachment }}
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-between mt-5">
+                    <a href="{% url 'notice:notice_list' %}" class="btn btn-outline-secondary px-4">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-success px-5 fw-semibold">
+                        🚀 Post Notice
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================= VOICE ENGINE ================= -->
+<script>
+let recognition;
+let isListening = false;
+let finalTranscript = "";
+
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const listeningBox = document.getElementById("listeningBox");
+const textarea = document.querySelector("textarea");
+
+/* 🔹 Sync buffer if user clears or edits text manually */
+textarea.addEventListener("input", () => {
+    if (!isListening) {
+        finalTranscript = textarea.value.trim();
+    }
+});
+
+function setupRecognition() {
+    recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+        isListening = true;
+        listeningBox.classList.remove("d-none");
+        startBtn.classList.add("d-none");
+        stopBtn.classList.remove("d-none");
+    };
+
+    recognition.onresult = (event) => {
+        let interim = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const text = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += text.trim() + "\n";
+            } else {
+                interim += text;
+            }
+        }
+        textarea.value = finalTranscript + interim;
+        textarea.scrollTop = textarea.scrollHeight;
+    };
+
+    recognition.onerror = stopListening;
+    recognition.onend = finalizeText;
+}
+
+function startListening() {
+    if (!isListening) {
+        // ✅ Reset buffer if textarea was cleared
+        if (textarea.value.trim() === "") {
+            finalTranscript = "";
+        } else {
+            finalTranscript = textarea.value.trim() + "\n";
+        }
+        setupRecognition();
+        recognition.start();
+    }
+}
+
+function stopListening() {
+    if (recognition && isListening) {
+        recognition.stop(); // safe stop (keeps last words)
+    }
+}
+
+function finalizeText() {
+    isListening = false;
+    textarea.value = finalTranscript.trim();
+    listeningBox.classList.add("d-none");
+    startBtn.classList.remove("d-none");
+    stopBtn.classList.add("d-none");
+}
+
+startBtn.addEventListener("click", startListening);
+stopBtn.addEventListener("click", stopListening);
+</script>
+
+<!-- ================= STYLES ================= -->
+<style>
+textarea, input, select {
+    border-radius: 12px !important;
+}
+
+.listening-ui {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8f9fa;
+    padding: 8px 14px;
+    border-left: 4px solid #dc3545;
+    border-radius: 10px;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #dc3545;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.4; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+
+{% endblock %}

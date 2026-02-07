@@ -63,10 +63,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AI_Digital_Notice_Board.wsgi.application'
 ASGI_APPLICATION = 'AI_Digital_Notice_Board.asgi.application'
 
-RENDER = os.environ.get("RENDER", "").lower() == "true"
+USE_SQLITE = os.getenv("USE_SQLITE", "false").lower() == "true"
 
-if os.getenv("RENDER") == "true":
-    # ✅ Render / Production
+if USE_SQLITE:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -74,7 +73,6 @@ if os.getenv("RENDER") == "true":
         }
     }
 else:
-    # ✅ Local development (MySQL)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",

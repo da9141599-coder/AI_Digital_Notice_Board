@@ -7,12 +7,10 @@ load_dotenv()  # loads .env from project root
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'replace-me-in-production')
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    "127.0.0.1,localhost"
-).split(",")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = False
+ALLOWED_HOSTS = ['*']
+
 
 
 # Apps
